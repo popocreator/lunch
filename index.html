@@ -1,0 +1,194 @@
+<div class="text-animation-container">
+  <div class="letters-container">
+    <span class="letter">해</span>
+    <span class="letter">물</span>
+    <span class="letter">도</span>
+    <span class="letter">삭</span>
+    <span class="letter">볶</span>
+    <span class="letter">음</span>
+    <span class="letter">면</span>
+  </div>
+</div>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .text-animation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #000;
+  }
+
+  .letters-container {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .letter {
+    display: inline-block;
+    font-family: 'Arial Black', sans-serif;
+    font-size: 12rem;
+    font-weight: 900;
+    position: relative;
+    color: transparent;
+    -webkit-text-stroke: 2px #fff;
+    text-stroke: 2px #fff;
+  }
+
+  .letter::before,
+  .letter::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: all 0.3s;
+    opacity: 0;
+  }
+
+  .letter::before {
+    -webkit-text-stroke: 2px #00ffff;
+    text-stroke: 2px #00ffff;
+    z-index: 2;
+  }
+
+  .letter::after {
+    -webkit-text-stroke: 2px #ff00ff;
+    text-stroke: 2px #ff00ff;
+    z-index: 1;
+  }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const letters = document.querySelectorAll('.letter');
+    letters.forEach(letter => {
+      letter.setAttribute('data-text', letter.textContent);
+    });
+
+    const tl = gsap.timeline({
+      repeat: -1,
+      repeatDelay: 0.5,
+    });
+
+    gsap.set(letters, {
+      opacity: 0,
+      scale: 0,
+      rotationX: -90,
+    });
+
+    tl.to(letters, {
+      opacity: 1,
+      scale: 1,
+      rotationX: 0,
+      duration: 1,
+      stagger: {
+        each: 0.1,
+        ease: 'back.out(1.7)',
+      },
+    })
+      .to(letters, {
+        duration: 0.1,
+        skewX: 20,
+        ease: 'power4.inOut',
+        stagger: {
+          each: 0.05,
+          from: 'random',
+        },
+      })
+      .to(letters, {
+        duration: 0.1,
+        skewX: 0,
+        ease: 'power4.inOut',
+      })
+      .to(letters, {
+        duration: 0.2,
+        textStrokeColor: '#00ffff',
+        stagger: {
+          each: 0.05,
+          from: 'start',
+        },
+      })
+      .to(letters, {
+        duration: 0.2,
+        textStrokeColor: '#ff00ff',
+        stagger: {
+          each: 0.05,
+          from: 'end',
+        },
+      })
+      .to(letters, {
+        duration: 0.2,
+        textStrokeColor: '#ffffff',
+      })
+      .to(letters, {
+        duration: 0.4,
+        scaleY: 1.4,
+        ease: 'power2.in',
+        stagger: {
+          each: 0.05,
+          from: 'center',
+        },
+      })
+      .to(letters, {
+        duration: 0.6,
+        scaleY: 1,
+        ease: 'elastic.out(1, 0.3)',
+        stagger: {
+          each: 0.05,
+          from: 'center',
+        },
+      })
+      .to(letters, {
+        duration: 0.6,
+        y: -50,
+        ease: 'power2.inOut',
+        stagger: {
+          each: 0.05,
+          repeat: 1,
+          yoyo: true,
+        },
+      })
+      .to(letters, {
+        duration: 0.8,
+        opacity: 0,
+        scale: 0,
+        rotationX: 90,
+        stagger: {
+          each: 0.1,
+          from: 'end',
+          ease: 'back.in(1.7)',
+        },
+      });
+
+    letters.forEach(letter => {
+      letter.addEventListener('mouseenter', () => {
+        gsap.to(letter, {
+          scale: 1.2,
+          color: '#fff',
+          textStroke: 'none',
+          webkitTextStroke: 'none',
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+      });
+
+      letter.addEventListener('mouseleave', () => {
+        gsap.to(letter, {
+          scale: 1,
+          color: 'transparent',
+          textStroke: '2px #fff',
+          webkitTextStroke: '2px #fff',
+          duration: 0.3,
+          ease: 'power2.in',
+        });
+      });
+    });
+  });
+</script>
